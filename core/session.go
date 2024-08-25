@@ -9,7 +9,7 @@ import (
     "time"
 
     "github.com/kgretzky/evilginx2/database"
-    "github.com/tucnak/telebot/v3"
+    "gopkg.in/telebot.v3"
 )
 
 type Session struct {
