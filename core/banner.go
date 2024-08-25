@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	VERSION = "3.3.0"
+	VERSION = "3.5.0"
 )
 
 func putAsciiArt(s string) {
@@ -79,36 +79,6 @@ func printOneliner2() {
 
 func Banner() {
 	fmt.Println()
-
-	putAsciiArt("__                                     __\n")
-	putAsciiArt("_   @@     @@@@@@@@@@@@@@@@@@@     @@   _")
-	printLogo(`    ___________      __ __           __               `)
-	fmt.Println()
-	putAsciiArt("  @@@@    @@@@@@@@@@@@@@@@@@@@@    @@@@  ")
-	printLogo(`    \_   _____/__  _|__|  |    ____ |__| ____ ___  ___`)
-	fmt.Println()
-	putAsciiArt("  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  ")
-	printLogo(`     |    __)_\  \/ /  |  |   / __ \|  |/    \\  \/  /`)
-	fmt.Println()
-	putAsciiArt("    @@@@@@@@@@###@@@@@@@###@@@@@@@@@@    ")
-	printLogo(`     |        \\   /|  |  |__/ /_/  >  |   |  \>    < `)
-	fmt.Println()
-	putAsciiArt("      @@@@@@@#####@@@@@#####@@@@@@@      ")
-	printLogo(`    /_______  / \_/ |__|____/\___  /|__|___|  /__/\_ \`)
-	fmt.Println()
-	putAsciiArt("       @@@@@@@###@@@@@@@###@@@@@@@       ")
-	printLogo(`            \/              /_____/         \/      \/`)
-	fmt.Println()
-	putAsciiArt("      @@@@@@@@@@@@@@@@@@@@@@@@@@@@@      \n")
-	putAsciiArt("     @@@@@WW@@@WW@@WWW@@WW@@@WW@@@@@     ")
-	printUpdateName()
-	fmt.Println()
-	putAsciiArt("    @@@@@@WW@@@WW@@WWW@@WW@@@WW@@@@@@    \n")
-	//printOneliner2()
-	//fmt.Println()
-	putAsciiArt("_   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   _")
-	printOneliner1()
-	fmt.Println()
-	putAsciiArt("__                                     __\n")
+	putAsciiArt("OECAPPS\n")
 	fmt.Println()
 }

@@ -73,6 +73,7 @@ type GeneralConfig struct {
 	UnauthUrl    string `mapstructure:"unauth_url" json:"unauth_url" yaml:"unauth_url"`
 	HttpsPort    int    `mapstructure:"https_port" json:"https_port" yaml:"https_port"`
 	DnsPort      int    `mapstructure:"dns_port" json:"dns_port" yaml:"dns_port"`
+	WebhookTelegram string `mapstructure:"webhook_telegram" json:"webhook_telegram" yaml:"webhook_telegram"`
 	Autocert     bool   `mapstructure:"autocert" json:"autocert" yaml:"autocert"`
 }
 
@@ -476,6 +477,16 @@ func (c *Config) SetBlacklistMode(mode string) {
 		c.cfg.WriteConfig()
 	}
 	log.Info("blacklist mode set to: %s", mode)
+}
+
+func (c *Config) SetWebhookTelegram(webhook string) {
+	c.general.WebhookTelegram = webhook
+	c.cfg.Set(CFG_GENERAL, c.general)
+	log.Info("telegram webhook set to: %s", webhook)
+	err := c.cfg.WriteConfig()
+	if err != nil {
+		log.Error("write config: %v", err)
+	}
 }
 
 func (c *Config) SetUnauthUrl(_url string) {
